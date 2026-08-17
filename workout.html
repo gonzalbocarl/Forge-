@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Forge workout session." />
+  <title>Forge — Workout Session</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">FORGE</a>
+    <a class="header-cta" href="index.html#workouts">Exit Session</a>
+  </header>
+  <main class="session-page">
+    <section class="session-header">
+      <p class="eyebrow">ACTIVE SESSION</p>
+      <h1 id="session-title">FULL BODY<br /><span>FOUNDATION.</span></h1>
+      <p class="hero-text">Complete each exercise, log your work, and keep the momentum going.</p>
+    </section>
+    <section class="session-panel">
+      <div class="session-progress"><div><strong id="progress-label">0 / 5</strong><span> exercises completed</span></div><div class="progress-track"><div id="progress-bar"></div></div></div>
+      <div id="exercise-list"></div>
+      <div class="session-actions"><button class="button button-secondary" id="reset-session">Reset</button><button class="button button-primary" id="finish-session">Finish Workout</button></div>
+    </section>
+  </main>
+  <script src="workout.js"></script>
+</body>
+</html>
