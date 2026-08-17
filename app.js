@@ -1,11 +1,16 @@
-const workouts = [
-  { name: 'Full Body Foundation', level: 'Beginner', duration: '35 min', focus: 'Full Body' },
-  { name: 'Upper Strength', level: 'Intermediate', duration: '45 min', focus: 'Upper Body' },
-  { name: 'Lower Power', level: 'Intermediate', duration: '45 min', focus: 'Lower Body' },
-  { name: 'Quick Conditioning', level: 'Beginner', duration: '20 min', focus: 'Conditioning' },
-  { name: 'Push Hypertrophy', level: 'Advanced', duration: '50 min', focus: 'Upper Body' },
-  { name: 'Leg Builder', level: 'Advanced', duration: '55 min', focus: 'Lower Body' }
+const products=[
+{name:'Forge Performance Tee',category:'Apparel',price:899,tag:'BEST SELLER'},
+{name:'Forge Training Shorts',category:'Apparel',price:1099,tag:'NEW'},
+{name:'Heavy Resistance Bands',category:'Equipment',price:749,tag:'TRAINING'},
+{name:'Adjustable Hand Gripper',category:'Equipment',price:599,tag:'ESSENTIAL'},
+{name:'Forge Shaker Bottle',category:'Accessories',price:649,tag:'NEW'},
+{name:'Performance Gym Bag',category:'Accessories',price:1499,tag:'BEST SELLER'},
+{name:'Wrist Wraps',category:'Accessories',price:699,tag:'TRAINING'},
+{name:'Forge Oversized Hoodie',category:'Apparel',price:1599,tag:'LIMITED'}
 ];
-const grid=document.querySelector('#workout-grid'),search=document.querySelector('#workout-search'),filters=document.querySelectorAll('[data-filter]'),count=document.querySelector('#workout-count');let activeFilter='All';
-function render(){const query=search.value.trim().toLowerCase();const visible=workouts.filter(w=>(activeFilter==='All'||w.focus===activeFilter)&&`${w.name} ${w.focus} ${w.level}`.toLowerCase().includes(query));count.textContent=`${visible.length} workout${visible.length===1?'':'s'}`;grid.innerHTML=visible.map((w,i)=>`<article class="workout-card"><div class="workout-top"><span>0${i+1}</span><span>${w.level}</span></div><h3>${w.name}</h3><p>${w.focus} · ${w.duration}</p><a class="start-workout" href="workout.html?workout=${encodeURIComponent(w.name)}">Start Workout →</a></article>`).join('')||'<p class="empty-state">No workouts match your search.</p>'}
-filters.forEach(button=>button.addEventListener('click',()=>{activeFilter=button.dataset.filter;filters.forEach(item=>item.classList.toggle('active',item===button));render()}));search.addEventListener('input',render);render();
+const money=n=>`₱${n.toLocaleString('en-PH')}`;const grid=document.querySelector('#product-grid');const search=document.querySelector('#product-search');const filters=document.querySelectorAll('#product-filters .filter');let active='All';
+function getCart(){return JSON.parse(localStorage.getItem('forge-cart')||'[]')}
+function saveCart(cart){localStorage.setItem('forge-cart',JSON.stringify(cart));updateCartCount()}
+function updateCartCount(){const el=document.querySelector('#cart-count');if(el)el.textContent=getCart().reduce((s,p)=>s+p.qty,0)}
+function render(){const q=search.value.toLowerCase();const items=products.filter(p=>(active==='All'||p.category===active)&&`${p.name} ${p.category} ${p.tag}`.toLowerCase().includes(q));grid.innerHTML=items.map(p=>`<article class="product-card"><div class="product-image"><span>${p.tag}</span><strong>FORGE</strong></div><div class="product-info"><small>${p.category}</small><h3>${p.name}</h3><div class="product-bottom"><b>${money(p.price)}</b><button class="add-cart" data-name="${p.name}">Add to Cart</button></div></div></article>`).join('')||'<p class="empty-state">No products found.</p>'}
+filters.forEach(b=>b.addEventListener('click',()=>{active=b.dataset.filter;filters.forEach(x=>x.classList.toggle('active',x===b));render()}));search.addEventListener('input',render);grid.addEventListener('click',e=>{const b=e.target.closest('.add-cart');if(!b)return;const product=products.find(p=>p.name===b.dataset.name);const cart=getCart();const existing=cart.find(p=>p.name===product.name);existing?existing.qty++:cart.push({...product,qty:1});saveCart(cart);b.textContent='Added ✓';setTimeout(()=>b.textContent='Add to Cart',900)});document.querySelectorAll('[data-category]').forEach(a=>a.addEventListener('click',()=>{active=a.dataset.category;filters.forEach(x=>x.classList.toggle('active',x.dataset.filter===active));render()}));render();updateCartCount();
